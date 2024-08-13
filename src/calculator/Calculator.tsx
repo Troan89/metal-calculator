@@ -81,7 +81,7 @@ export const Calculator = () => {
                                 metals
                                     .find((metal) => metal.code === selectedMetal)
                                     ?.finenessList.map((fineness) => (
-                                    <option style={{padding:"10px"}} key={fineness.id} value={fineness.value}>
+                                    <option key={fineness.id} value={fineness.value}>
                                         {fineness.value}
                                     </option>
                                 ))}
