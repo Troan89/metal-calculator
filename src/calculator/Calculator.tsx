@@ -42,6 +42,8 @@ export const Calculator = () => {
             setSelectedPaymentType(selectedPaymentType);
             setWeight(weight);
             setResult(result);
+        } else {
+            setSelectedMetal("gold");
         }
     }, []);
 
@@ -68,31 +70,45 @@ export const Calculator = () => {
                         Укажите следующие параметры:
                     </div>
                     <div className={s.parameters}>
-                        <Select
-                            options={selectedMetal ? metals.find(m => m.code === selectedMetal)?.finenessList.map(f => ({ label: `${f.value}`, value: f.value })) || [] : []}
-                            value={selectedFineness}
-                            onChange={value => setSelectedFineness(value as number)}
-                            placeholder="Проба металла"
-                        />
-                        <Select
-                            options={payment.map(type => ({ label: type.title, value: type.code }))}
+                        <select
+                            value={selectedFineness || ""}
+                            onChange={(e) => setSelectedFineness(parseInt(e.target.value))}
+                            disabled={!selectedMetal}
+                        >
+                            <option value="">Проба металла</option>
+                            {selectedMetal &&
+                                metals
+                                    .find((metal) => metal.code === selectedMetal)
+                                    ?.finenessList.map((fineness) => (
+                                    <option key={fineness.id} value={fineness.value}>
+                                        {fineness.value}
+                                    </option>
+                                ))}
+                        </select>
+                        <select
                             value={selectedPaymentType}
-                            onChange={value => setSelectedPaymentType(value as string)}
-                            placeholder="Способ выплаты"
-                        />
+                            onChange={(e) => setSelectedPaymentType(e.target.value)}
+                            disabled={!selectedMetal || !selectedFineness}
+                        >
+                            <option value="">Способ выплаты</option>
+                            {payment.map((type) => (
+                                <option key={type.code} value={type.code}>
+                                    {type.title}
+                                </option>
+                            ))}
+                        </select>
                         <input
                             type="number"
                             value={weight}
                             onChange={(e) => setWeight(e.target.value)}
                             placeholder="Вес металла (в граммах)"
-                            disabled={!selectedMetal || !selectedFineness || !selectedPaymentType}
                         />
                     </div>
                     <div className={s.costСalculation}>
                         {result !== null && <div className={s.result}>ИТОГО: {result}</div>}
                         <button
                             onClick={handleCalculate}
-                            disabled={!selectedMetal || !selectedFineness || !selectedPaymentType || !weight}
+                            disabled={!selectedFineness || !selectedPaymentType || !weight}
                         >
                             Рассчитать
                         </button>
