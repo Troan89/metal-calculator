@@ -74,8 +74,9 @@ export const Calculator = () => {
                             value={selectedFineness || ""}
                             onChange={(e) => setSelectedFineness(parseInt(e.target.value))}
                             disabled={!selectedMetal}
+
                         >
-                            <option className={s.option} value="">Проба металла</option>
+                            <option className={s.option} value="" hidden>Проба металла</option>
                             {selectedMetal &&
                                 metals
                                     .find((metal) => metal.code === selectedMetal)
@@ -89,7 +90,7 @@ export const Calculator = () => {
                             value={selectedPaymentType}
                             onChange={(e) => setSelectedPaymentType(e.target.value)}
                         >
-                            <option value="">Способ выплаты</option>
+                            <option value="" hidden>Способ выплаты</option>
                             {payment.map((type) => (
                                 <option key={type.code} value={type.code}>
                                     {type.title}
