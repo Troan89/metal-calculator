@@ -1,0 +1,46 @@
+.customSelect {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+
+  &__trigger {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid rgba(212, 212, 212, 1);
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+
+    .arrow {
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 5px solid rgba(212, 212, 212, 1);
+    }
+  }
+
+  .customOptions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid rgba(212, 212, 212, 1);
+    border-radius: 5px;
+    z-index: 1;
+
+    .customOption {
+      padding: 10px;
+      cursor: pointer;
+
+      &:hover,
+      &.selected {
+        background: rgba(180, 133, 101, 1);
+        color: white;
+      }
+    }
+  }
+}
