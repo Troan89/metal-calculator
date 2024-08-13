@@ -75,7 +75,7 @@ export const Calculator = () => {
                             onChange={(e) => setSelectedFineness(parseInt(e.target.value))}
                             disabled={!selectedMetal}
                         >
-                            <option value="">Проба металла</option>
+                            <option className={s.option} value="">Проба металла</option>
                             {selectedMetal &&
                                 metals
                                     .find((metal) => metal.code === selectedMetal)
