@@ -7,19 +7,19 @@ import {Select} from "../components/ui/select/Select";
 export const Calculator = () => {
     const [selectedMetal, setSelectedMetal] = useState<string>("");
     const [selectedFineness, setSelectedFineness] = useState<number | null>(null);
-    const [selectedPaymentType, setSelectedPaymentType] = useState<string>("");
+    const [selectedPayment, setSelectedPayment] = useState<string>("");
     const [weight, setWeight] = useState<string>("");
     const [result, setResult] = useState<number>(0);
 
     const handleCalculate = () => {
-        if (selectedMetal && selectedFineness && selectedPaymentType && weight) {
+        if (selectedMetal && selectedFineness && selectedPayment && weight) {
             const metal = metals.find((m) => m.code === selectedMetal);
             if (metal) {
                 const fineness = metal.finenessList.find((f) => f.value === selectedFineness);
                 if (fineness) {
-                    const pricePerGram = fineness[selectedPaymentType as keyof typeof fineness];
-                    setResult(pricePerGram * parseFloat(weight));
-                    localStorage.setItem("lastCalculation", JSON.stringify({ selectedMetal, selectedFineness, selectedPaymentType, weight, result: pricePerGram * parseFloat(weight) }));
+                    const pricePerGram = fineness[selectedPayment as keyof typeof fineness];
+                    setResult(pricePerGram * Number(weight));
+                    localStorage.setItem("lastCalculation", JSON.stringify({ selectedMetal, selectedFineness, selectedPaymentType: selectedPayment, weight, result: pricePerGram * Number(weight) }));
                 }
             }
         }
@@ -28,7 +28,7 @@ export const Calculator = () => {
     const handleMetalChange = (code: string) => {
         setSelectedMetal(code);
         setSelectedFineness(null);
-        setSelectedPaymentType("");
+        setSelectedPayment("");
         setWeight("");
         setResult(0);
     };
@@ -39,7 +39,7 @@ export const Calculator = () => {
             const { selectedMetal, selectedFineness, selectedPaymentType, weight, result } = JSON.parse(savedCalculation);
             setSelectedMetal(selectedMetal);
             setSelectedFineness(selectedFineness);
-            setSelectedPaymentType(selectedPaymentType);
+            setSelectedPayment(selectedPaymentType);
             setWeight(weight);
             setResult(result);
         } else {
@@ -72,7 +72,7 @@ export const Calculator = () => {
                     <div className={s.parameters}>
                         <select
                             value={selectedFineness || ""}
-                            onChange={(e) => setSelectedFineness(parseInt(e.target.value))}
+                            onChange={(e) => setSelectedFineness(Number(e.target.value))}
                             disabled={!selectedMetal}
 
                         >
@@ -87,8 +87,8 @@ export const Calculator = () => {
                                 ))}
                         </select>
                         <select
-                            value={selectedPaymentType}
-                            onChange={(e) => setSelectedPaymentType(e.target.value)}
+                            value={selectedPayment}
+                            onChange={(e) => setSelectedPayment(e.target.value)}
                         >
                             <option value="" hidden>Способ выплаты</option>
                             {payment.map((type) => (
@@ -105,10 +105,10 @@ export const Calculator = () => {
                         />
                     </div>
                     <div className={s.costСalculation}>
-                        {result !== null && <div className={s.result}>ИТОГО: {result}</div>}
+                        {result !== 0 ? <div className={s.result}>ИТОГО: {result.toLocaleString('ru-RU')}</div> : <div></div>}
                         <button
                             onClick={handleCalculate}
-                            disabled={!selectedFineness || !selectedPaymentType || !weight}
+                            disabled={!selectedFineness || !selectedPayment || !weight}
                         >
                             Рассчитать
                         </button>
